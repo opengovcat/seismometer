@@ -1,0 +1,12 @@
+# Seismeter scripts
+
+Examples:
+
+- retrieve generalitat president info page
+  $ python getty.py --page 1
+
+- create a "compatible" XML file from cache pages
+  $ python getty.py --xml
+
+- retrieve pages from gencat in parallel using paralell command
+  $ cat ids.txt | parallel python getty.py --page
