@@ -8,11 +8,12 @@ import gzip
 RAWDATADIR = 'opengov.cat/rawdata/xml/' # use 'wget -r -np http://opengov.cat/rawdata/xml/ to download files'
 start = {}
 end = {}
+entity = {}
 
 # load entities
 def read():
     files = [ f for f in os.listdir(RAWDATADIR) if f.endswith('xml.gz') ]
-    for f in sorted(files):
+    for f in sorted(files)[:10]:
         date = f[:10]
         try:
             xml = gzip.open(os.path.join(RAWDATADIR, f), 'rb').read()
@@ -25,9 +26,18 @@ def read():
         e = {}
         for item in root.item:
             e[item.id] = True
+            if not entity.has_key(item.id):
+                entity[item.id] = {
+                    'nom': item.nom,
+                    'resp': item.iddep,
+                    'dep': item.dep,
+                    'iddep': item.iddep
+                }
+
             #print f[:10], item.id, item.iddep
             if not start.has_key(item.id):
                 start[item.id] = date
+				
 
         # check last entities data
         for i in start.keys():
@@ -38,4 +48,5 @@ read()
 
 # print csv file with ids and dates
 for i in sorted(start.keys()):
-    print '%s,%s,%s' % (i, start[i], end.has_key(i) and end[i] or '')
+    e = entity[i]
+    print '%s,%s,%s, %s,%s,%s,%s' % (i, start[i], end.has_key(i) and end[i] or '', e['nom'], e['resp'], e['dep'], e['iddep'])
