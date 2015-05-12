@@ -2,6 +2,7 @@
 from lxml import objectify
 import argparse
 import os
+import codecs
 import gzip
 
 # init constants and vars
@@ -13,7 +14,7 @@ entity = {}
 # load entities
 def read():
     files = [ f for f in os.listdir(RAWDATADIR) if f.endswith('xml.gz') ]
-    for f in sorted(files)[:10]:
+    for f in sorted(files):
         date = f[:10]
         try:
             xml = gzip.open(os.path.join(RAWDATADIR, f), 'rb').read()
@@ -37,7 +38,7 @@ def read():
             #print f[:10], item.id, item.iddep
             if not start.has_key(item.id):
                 start[item.id] = date
-				
+
 
         # check last entities data
         for i in start.keys():
@@ -49,4 +50,5 @@ read()
 # print csv file with ids and dates
 for i in sorted(start.keys()):
     e = entity[i]
-    print '%s,%s,%s, %s,%s,%s,%s' % (i, start[i], end.has_key(i) and end[i] or '', e['nom'], e['resp'], e['dep'], e['iddep'])
+    f = codecs.open('entities.csv', encoding='utf-8', mode='a+')
+    f.write('%s,%s,%s, %s,%s,%s,%s\n' % (i, start[i], end.has_key(i) and end[i] or '', e['nom'], e['resp'], e['dep'], e['iddep']))
