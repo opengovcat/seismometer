@@ -26,18 +26,19 @@ def read():
         # check xml data
         e = {}
         for item in root.item:
-            e[item.id] = True
-            if not entity.has_key(item.id):
-                entity[item.id] = {
+            id = int(item.id)
+            e[id] = True
+            if not entity.has_key(id):
+                entity[id] = {
                     'nom': item.nom,
-                    'resp': item.iddep,
+                    'resp': item.resp,
                     'dep': item.dep,
                     'iddep': item.iddep
                 }
 
             #print f[:10], item.id, item.iddep
-            if not start.has_key(item.id):
-                start[item.id] = date
+            if not start.has_key(id):
+                start[id] = date
 
 
         # check last entities data
@@ -47,8 +48,12 @@ def read():
 
 read()
 
+f = codecs.open('entities.csv', encoding='utf-8', mode='a+')
+f.write('id,start,end,nom,resp,dep,iddep\n')
+
 # print csv file with ids and dates
 for i in sorted(start.keys()):
     e = entity[i]
     f = codecs.open('entities.csv', encoding='utf-8', mode='a+')
-    f.write('%s,%s,%s, %s,%s,%s,%s\n' % (i, start[i], end.has_key(i) and end[i] or '', e['nom'], e['resp'], e['dep'], e['iddep']))
+    #f.write('%s,%s,%s, %s,%s,%s,%s\n' % (i, start[i], end.has_key(i) and end[i] or '', e['nom'], e['resp'], e['dep'], e['iddep']))
+    f.write('%s,%s,%s,"%s","%s","%s",%s\n' % (i, start[i], end.has_key(i) and end[i] or '', e['nom'], e['resp'], e['dep'], e['iddep']))
