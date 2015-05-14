@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Line Chart</title>
+		<script src="../libs/Chart.js/Chart.js"></script>
+		<script type="text/javascript" src="../libs/d3/d3.min.js"></script>
+	</head>
+	<body>
+		<div style="width:30%">
+			<div>
+				<canvas id="canvas" height="450" width="600"></canvas>
+			</div>
+		</div>
+
+
+	<script>
+
+		d3.csv("entities.csv", function(entitiesRaw) {
+
+			entitiesRaw.forEach(function(d, i) {
+				d.id = d.id,
+				d.startDate = new Date(d.startDate), // convert "date" column to Date
+				d.endDate = new Date(d.endDate), // convert "date" column to Date
+				d.nom = d.nom,
+				d.resp = d.resp,
+				d.dep = d.dep,
+				d.iddep = +d.iddep // convert "Length" column to number	
+			});
+
+			//TODO CARLES 
+			//Use FILTERS or SIMILAR TO LOAD ALL THE DATA INTO CHARTS.js Example 
+			//First example in mind: load all data into lineChart examples and do a similar visualization like this one:
+			//https://tableau7.files.wordpress.com/2013/11/horizongraph.png
+
+
+
+		});
+
+		//dump(d.startDate);
+
+		var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+		var lineChartData = {
+			labels : ["January","February","March","April","May","June","July"],
+			datasets : [
+				{
+					label: "My First dataset",
+					fillColor : "rgba(220,220,220,0.2)",
+					strokeColor : "rgba(220,220,220,1)",
+					pointColor : "rgba(220,220,220,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(220,220,220,1)",
+					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				},
+				{
+					label: "My Second dataset",
+					fillColor : "rgba(151,187,205,0.2)",
+					strokeColor : "rgba(151,187,205,1)",
+					pointColor : "rgba(151,187,205,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(151,187,205,1)",
+					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				}
+			]
+
+		}
+
+	window.onload = function(){
+		var ctx = document.getElementById("canvas").getContext("2d");
+		window.myLine = new Chart(ctx).Line(lineChartData, {
+			showScale: false, bezierCurve: false, datasetFill : true
+		});
+	}
+
+
+	</script>
+	</body>
+</html>
