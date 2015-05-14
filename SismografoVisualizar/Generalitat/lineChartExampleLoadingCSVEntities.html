@@ -6,9 +6,9 @@
 		<script type="text/javascript" src="../libs/d3/d3.min.js"></script>
 	</head>
 	<body>
-		<div style="width:30%">
+		<div style="width:80%">
 			<div>
-				<canvas id="canvas" height="450" width="600"></canvas>
+				<canvas id="canvas" height="40" width="1000"></canvas>
 			</div>
 		</div>
 
@@ -36,7 +36,7 @@
 
 		});
 
-		//dump(d.startDate);
+		//LINE CHART DATA EXAMPLE
 
 		var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
 		var lineChartData = {
@@ -67,6 +67,9 @@
 		}
 
 	window.onload = function(){
+
+		//TODO Just thinking... load all entitiesRaw into one canvas or create one canvas for each entity
+
 		var ctx = document.getElementById("canvas").getContext("2d");
 		window.myLine = new Chart(ctx).Line(lineChartData, {
 			showScale: false, bezierCurve: false, datasetFill : true
