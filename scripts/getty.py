@@ -8,14 +8,18 @@ from bs4 import BeautifulSoup
 from yattag import Doc, indent
 import os
 import codecs
+import httplib2
+import sys
 #import re
 
 # init constants and vars
 URL = 'http://sac.gencat.cat/sacgencat/AppJava/organisme_fitxa.jsp?codi=%i'
 XML = 'unitatssac.xml'
+IDS = 'ids.txt'
 CACHEDIR = 'cache'
 ENTITIES = {}
 ENTITIESNAME = {}
+
 
 # setup entities
 def init():
@@ -39,6 +43,7 @@ def get_page(page):
 
     # is an error page?
     if 'error' in br.title().lower():
+        open(IDS, 'a').write('%s\n' % page)
         return
 
     html = resp.read()
@@ -54,6 +59,7 @@ def get_page(page):
         params = urlparse.parse_qs(url.query)
         id = params['codi'][0]
     except:
+        open(IDS, 'a').write('%s\n' % page)
         return
 
     d = '%s/%s' % (CACHEDIR, id)
@@ -157,6 +163,11 @@ if __name__ == '__main__':
 
     # check args
     if args.page:
+        # check if page exists (invalid: they are responding 200 for error)
+        #h = httplib2.Http()
+        #h.follow_redirects = False
+        #resp, body = h.request(URL % args.page, 'GET')
+        #sys.exit()
         get_page(args.page)
     elif args.xml:
         xml = show_xml()
